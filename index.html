@@ -1,501 +1,476 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>你怎么偷偷来看陈煊鹏的设计实习汇报</title>
-  <style>
-    /* 主题色定义 */
-    :root {
-      --primary: #00528E; /* RGB(0,82,142) */
-      --pink: #FFD1DC;
-      --light-pink: #FFEBF0;
-      --light-blue: #B3E0FF;
-      --light-green: #D1F2E0;
-      --soft-beige: #F8F4E9; /* 浅米黄色背景 */
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    }
-    
-    body {
-      background: var(--soft-beige);
-      color: #333;
-      line-height: 1.6;
-      font-size: 16px;
-      position: relative;
-    }
-    
-    /* 添加不显眼的背景纹理 */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(circle at 10% 20%, rgba(0,0,0,0.01) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(0,0,0,0.01) 0%, transparent 20%);
-      z-index: -1;
-      pointer-events: none;
-    }
-    
-    /* 顶部背景图 */
-    .hero {
-      height: 100vh;
-      background: url('images/firstpage.jpg') no-repeat center center;
-      background-size: cover;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: white;
-      overflow: hidden;
-    }
-    
-    .hero-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.3);
-      z-index: 1;
-    }
-    
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 900px;
-      padding: 0 2rem;
-    }
-    
-    .hero-content h1 {
-      font-size: 4rem;
-      font-weight: 800;
-      margin-bottom: 1.2rem;
-      text-shadow: 0 2px 15px rgba(0,0,0,0.3);
-      letter-spacing: 1.5px;
-      line-height: 1.1;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    
-    .hero-content p {
-      font-size: 2.5rem;
-      font-weight: 300;
-      letter-spacing: 2px;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.25);
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    
-    .hero-content.active h1,
-    .hero-content.active p {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    /* 导航栏 */
-    nav {
-      background: white;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      padding: 1.5rem 0;
-      transition: background 0.3s ease;
-    }
-    
-    nav.scrolled {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-    }
-    
-    nav ul {
-      display: flex;
-      justify-content: center;
-      list-style: none;
-      flex-wrap: wrap;
-      gap: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-    
-    nav a {
-      text-decoration: none;
-      color: var(--primary);
-      font-weight: 600;
-      padding: 0.8rem 1.5rem;
-      border-radius: 50px;
-      transition: all 0.3s ease;
-      position: relative;
-      font-size: 1.1rem;
-      letter-spacing: 0.5px;
-    }
-    
-    nav a:hover {
-      color: var(--pink);
-      background: var(--light-pink);
-    }
-    
-    nav a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 3px;
-      background: var(--primary);
-      transition: width 0.3s ease;
-    }
-    
-    nav a:hover::after {
-      width: 60%;
-    }
-    
-    /* 内容区域 - 添加滑动动画 */
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-    }
-    
-    section {
-      background: white;
-      border-radius: 30px;
-      padding: 3rem;
-      margin-bottom: 3.5rem;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-      opacity: 0;
-      transform: translateX(100px);
-      transition: all 0.8s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    section.active {
-      opacity: 1;
-      transform: translateX(0);
-    }
-    
-    section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, transparent, var(--primary), transparent);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    
-    section.active::before {
-      opacity: 1;
-    }
-    
-    h2 {
-      color: var(--primary);
-      margin-bottom: 2rem;
-      padding-bottom: 1.2rem;
-      border-bottom: 3px solid var(--light-pink);
-      font-size: 2.4rem;
-      font-weight: 700;
-      position: relative;
-      text-align: center;
-    }
-    
-    h2::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 3px;
-      background: var(--light-blue);
-      border-radius: 3px;
-    }
-    
-    .content-block {
-      margin-bottom: 2.5rem;
-    }
-    
-    .week-title {
-      background: var(--light-pink);
-      color: var(--primary);
-      font-weight: 700;
-      padding: 1rem 1.8rem;
-      border-radius: 24px;
-      margin-bottom: 1.8rem;
-      font-size: 1.4rem;
-      display: inline-block;
-      border-left: 4px solid var(--primary);
-      box-shadow: 0 4px 12px rgba(0, 82, 142, 0.15);
-    }
-    
-    ul, ol {
-      margin-left: 1.8rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    li {
-      margin-bottom: 0.7rem;
-      padding-left: 0.6rem;
-      position: relative;
-    }
-    
-    li::before {
-      content: '•';
-      color: var(--primary);
-      font-weight: bold;
-      position: absolute;
-      left: 0;
-    }
-    
-    .highlight {
-      background: var(--light-pink);
-      border-left: 4px solid var(--primary);
-      padding: 2rem;
-      border-radius: 0 20px 20px 0;
-      margin: 2.5rem 0;
-      border-radius: 24px;
-      font-weight: 600;
-      color: #555;
-      text-align: center;
-      font-size: 1.15rem;
-      box-shadow: 0 6px 20px rgba(0, 82, 142, 0.1);
-    }
-    
-    .highlight strong {
-      color: var(--primary);
-      font-weight: 700;
-    }
-    
-    footer {
-      text-align: center;
-      padding: 2.5rem 2rem;
-      color: #666;
-      font-size: 1.05rem;
-      background: white;
-      border-top: 1px solid var(--light-pink);
-    }
-    
-    @media (max-width: 768px) {
-      .hero-content h1 {
-        font-size: 3rem;
-      }
-      
-      .hero-content p {
-        font-size: 2rem;
-      }
-      
-      nav ul {
-        gap: 1.2rem;
-      }
-      
-      section {
-        padding: 2.5rem;
-      }
-      
-      h2 {
-        font-size: 2rem;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .hero-content h1 {
-        font-size: 2.4rem;
-      }
-      
-      .hero-content p {
-        font-size: 1.7rem;
-      }
-      
-      h2 {
-        font-size: 1.7rem;
-      }
-      
-      .week-title {
-        font-size: 1.2rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设计实习汇报 | 陈煊鹏</title>
+    <style>
+        /* --- 基础重置与字体 --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+        }
+
+        :root {
+            --primary-color: rgb(0, 82, 142);
+            --bg-color: #F7F9FB;
+            --text-main: #1D1D1F;
+            --text-secondary: #86868b;
+            --card-bg: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- 侧边导航栏 --- */
+        .sidebar {
+            position: fixed;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #d1d1d6;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-dot::after {
+            content: attr(data-label);
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: var(--primary-color);
+            opacity: 0;
+            white-space: nowrap;
+            transition: opacity 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-dot:hover::after, .nav-dot.active::after {
+            opacity: 1;
+        }
+
+        .nav-dot.active {
+            background-color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        /* --- 移动端隐藏侧边栏 --- */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+        }
+
+        /* --- 首屏 Hero Section --- */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            filter: brightness(0.9); /* 轻微压暗以突出文字 */
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .hero-title {
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 32px;
+            font-weight: 100; /* 极细字体 */
+            letter-spacing: 2px;
+            opacity: 0.9;
+        }
+
+        /* --- 通用容器与卡片 --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 100px 20px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            height: 30px;
+            width: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+        }
+
+        /* --- 内容排版 --- */
+        .tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: rgba(0, 82, 142, 0.1);
+            color: var(--primary-color);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        ul {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+
+        li::before {
+            content: '•';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 18px;
+        }
+
+        /* --- 时间轴样式 (用于每周工作) --- */
+        .timeline-item {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .time-label {
+            flex-shrink: 0;
+            width: 80px;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 18px;
+            padding-top: 5px;
+        }
+
+        .time-content {
+            flex-grow: 1;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .time-content:last-child {
+            border-bottom: none;
+        }
+
+        /* --- 动画类 --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            background-color: #ffffff;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+
+        /* --- 响应式调整 --- */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 48px; }
+            .hero-subtitle { font-size: 24px; }
+            .timeline-item { flex-direction: column; gap: 10px; }
+            .card { padding: 25px; }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- 顶部背景图 -->
-  <div class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <h1>设计实习汇报</h1>
-      <p>陈煊鹏</p>
-    </div>
-  </div>
+    <nav class="sidebar">
+        <div class="nav-dot active" data-label="首页" onclick="scrollToSection('home')"></div>
+        <div class="nav-dot" data-label="实习概况" onclick="scrollToSection('intro')"></div>
+        <div class="nav-dot" data-label="项目成果" onclick="scrollToSection('project')"></div>
+        <div class="nav-dot" data-label="工作流" onclick="scrollToSection('process')"></div>
+        <div class="nav-dot" data-label="收获与感悟" onclick="scrollToSection('reflection')"></div>
+    </nav>
 
-  <!-- 导航栏 -->
-  <nav id="navbar">
-    <ul>
-      <li><a href="#intro">实习介绍</a></li>
-      <li><a href="#work">实习内容</a></li>
-      <li><a href="#reflection">实习收获</a></li>
-    </ul>
-  </nav>
+    <header id="home" class="hero">
+        <img src="images/firstpage.jpg" alt="实习汇报封面" class="hero-bg">
+        <div class="hero-content">
+            <h1 class="hero-title">设计实习</h1>
+            <p class="hero-subtitle">陈煊鹏</p>
+        </div>
+    </header>
 
-  <main>
-    <!-- 实习介绍 -->
-    <section id="intro" class="fade-section">
-      <h2>实习介绍</h2>
-      <div class="content-block">
-        <h3>企业简介</h3>
-        <p>中车唐山机车车辆有限公司（简称中车唐山公司）是中国中车股份有限公司核心子企业，始建于1881年，是中国轨道交通工业的发轫之地。公司主要从事轨道交通装备的研发、制造、检修、服务以及数字产业化、新能源等战略性新兴产业。</p>
-        <p>拥有唐山、天津、泉州三大制造基地，职工近万人，是中国第一台蒸汽机车“中国火箭”号、第一辆御用客车“銮舆”及首列时速350公里高速动车组的诞生地。</p>
-      </div>
-
-      <div class="content-block">
-        <h3>项目简介：智联未来·零碳出行</h3>
-        <p>以某生态公园为设计场景，围绕“智联化”与“零碳化”主线，设计一套高架旅游观光交通系统，包含：</p>
-        <ul>
-          <li>观光载具（空中轨道列车）</li>
-          <li>车站与站点</li>
-          <li>线路规划</li>
-          <li>周边配套环境</li>
-          <li>智能交互系统（APP + 自助服务机）</li>
-        </ul>
-        <p>目标：打造国家级体育露营示范项目，融合运动、休闲、商业、生态于一体。</p>
-      </div>
+    <section id="intro" class="container">
+        <div class="reveal">
+            <h2 class="section-title">实习概况</h2>
+            <div class="card">
+                <span class="tag">CRRC TANGSHAN</span>
+                <h3>中车唐山机车车辆有限公司</h3>
+                <p>
+                    始建于1881年，是中国轨道交通工业的发轫之地。我有幸参与了由唐车赞助并主办的<strong>“2025天津大学国际暑期设计工作坊”</strong>。
+                </p>
+                <p>
+                    在实习期间，我肩负<strong>小组组长</strong>的职责，带领包括英国代尔夫特大学和天津大学同学在内的团队，进行跨文化、跨专业的合作设计。
+                </p>
+            </div>
+        </div>
     </section>
 
-    <!-- 实习内容 -->
-    <section id="work" class="fade-section">
-      <h2>实习内容及成果</h2>
-
-      <div class="week-title">第一周（7.7–7.13）</div>
-      <div class="content-block">
-        <p>参加“2025天津大学国际暑期设计工作坊”，担任小组组长，带领来自英国代尔夫特大学与天津大学的成员完成“智联未来·零碳出行”方案设计。</p>
-        <p>团队从4个小组中脱颖而出，荣获“优胜小组”称号。</p>
-        <p>完成内容：空中轨道线路规划、载具外观与尺寸设计、高架桥结构、玻璃观景平台、整体视觉风格（如“白色邮轮”概念）。</p>
-      </div>
-
-      <div class="week-title">第二周（8.12–8.17）</div>
-      <div class="content-block">
-        <p>深化项目分工，我独立负责<strong>智能交互系统设计</strong>。</p>
-        <p>工作内容：</p>
-        <ul>
-          <li>基于 JTBD（Jobs-To-Be-Done）理论分析用户需求</li>
-          <li>识别五大用户群体：本地居民、游客、学生、运动爱好者、特殊需求人群</li>
-          <li>拆解核心任务：导航、购票、紧急求助、活动信息、无障碍服务等</li>
-        </ul>
-      </div>
-
-      <div class="week-title">第三周（8.18–8.24）</div>
-      <div class="content-block">
-        <p>启动 APP 端详细设计，构建五模块架构：</p>
-        <ol>
-          <li>主页（公园资讯、快捷入口）</li>
-          <li>出行（地图、路线规划、步行导航）</li>
-          <li>乘车（二维码扫码、车辆信息）</li>
-          <li>专区（运动、宠物、露营、音乐节等垂直场景）</li>
-          <li>我的（账户、设置、紧急联系）</li>
-        </ol>
-        <p>采用卡片化布局 + 统一主题色（蓝白科技风），确保美观与易用性。</p>
-      </div>
-
-      <div class="week-title">第四周（8.25–8.31）</div>
-      <div class="content-block">
-        <p>根据导师与中车专家反馈，迭代优化 APP 设计。</p>
-        <p>同步完成<strong>自助服务机</strong>端设计：</p>
-        <ul>
-          <li>操作逻辑：待机 → 语言选择 → 主页 → 功能（地图指引 / 紧急求助）</li>
-          <li>界面简洁，仅保留核心功能，避免信息过载</li>
-          <li>视觉风格与 APP 保持一致，确保跨终端体验统一</li>
-        </ul>
-      </div>
-
-      <div class="highlight">
-        <strong>最终成果：</strong>一套完整的“云道 CloudRoad”智能观光交通交互系统设计方案，可直接用于作品集展示。
-      </div>
+    <section id="project" class="container">
+        <div class="reveal">
+            <h2 class="section-title">项目主题：智联未来 · 零碳出行</h2>
+            <div class="card">
+                <h3>设计目标</h3>
+                <p>
+                    以生态公园为场景，设计一套区别于常规地面交通的<strong>高架旅游观光交通工具</strong>及其配套的环境与<strong>智能交互系统</strong>。
+                </p>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+                    <div style="background: #f0f4f8; padding: 15px; border-radius: 12px; flex: 1; min-width: 200px;">
+                        <h4 style="color:var(--primary-color); margin-bottom: 8px;">五大建设板块</h4>
+                        <p style="font-size: 13px; margin:0;">覆盖潮流运动区、沙滩活动区、体育文化商业区等多元场景。</p>
+                    </div>
+                    <div style="background: #f0f4f8; padding: 15px; border-radius: 12px; flex: 1; min-width: 200px;">
+                        <h4 style="color:var(--primary-color); margin-bottom: 8px;">核心产出</h4>
+                        <p style="font-size: 13px; margin:0;">载具设计、车站规划、APP交互系统、自助服务终端。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- 实习收获 -->
-    <section id="reflection" class="fade-section">
-      <h2>实习收获及体会</h2>
-      <div class="content-block">
-        <p>本次实习是我学生生涯中一次意义非凡的深度学习与成长之旅。</p>
-        <ul>
-          <li>✅ <strong>跨文化协作能力提升</strong>：与国际团队高效合作，克服语言与专业差异。</li>
-          <li>✅ <strong>系统化设计思维</strong>：从用户需求出发，贯穿调研→分析→原型→迭代全流程。</li>
-          <li>✅ <strong>工业级项目经验</strong>：在真实企业场景中接受专家评审，理解产业落地逻辑。</li>
-          <li>✅ <strong>技术与人文融合</strong>：在“零碳出行”理念下，探索科技如何服务生态与人文。</li>
-        </ul>
-        <p>特别感谢中车唐山公司提供宝贵平台，以及天津大学、代尔夫特大学伙伴们的信任与支持。这段经历不仅锤炼了我的专业能力，更让我看到设计在推动可持续城市交通中的巨大潜力。</p>
-      </div>
+    <section id="process" class="container">
+        <h2 class="section-title reveal">设计演进与成果</h2>
+        
+        <div class="card reveal">
+            <div class="timeline-item">
+                <div class="time-label">Week 1</div>
+                <div class="time-content">
+                    <h3>团队组建与概念确立</h3>
+                    <span class="tag">7.7 - 7.13</span>
+                    <p>
+                        带领团队构建了“云道”空中轨道交通系统方案。涵盖线路规划、车辆外观、人行步道及人机界面基础。
+                    </p>
+                    <ul>
+                        <li><strong>荣获殊荣：</strong> 凭借出色的创新与合作，团队从四个小组中脱颖而出，斩获<strong>“优胜小组”</strong>称号。</li>
+                        <li><strong>初步产出：</strong> 完成了以“CloudRoad”为核心的立体交通组织构架图。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-label">Week 2</div>
+                <div class="time-content">
+                    <h3>用户研究与需求定义</h3>
+                    <span class="tag">8.12 - 8.17</span>
+                    <p>
+                        深入深化项目，我开始<strong>独立肩负交互设计</strong>的重任。
+                    </p>
+                    <ul>
+                        <li><strong>理论基础：</strong> 引入 <strong>JTBD (Jobs-to-be-done)</strong> 理论，分析用户在游览过程中的“待办任务”。</li>
+                        <li><strong>用户画像：</strong> 针对家庭游客、年轻运动群体及特殊需求人群（老年人/残障人士）建立详细画像。</li>
+                        <li><strong>解决方案：</strong> 确立了 "APP + 自助服务机" 的双端服务策略。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-label">Week 3</div>
+                <div class="time-content">
+                    <h3>APP 端深度设计</h3>
+                    <span class="tag">8.18 - 8.24</span>
+                    <p>
+                        构建兼顾用户体验与功能拓展性的系统架构。在视觉呈现上，采用<strong>卡片化和模块分区</strong>的设计理念，确保美观与简约的统一。
+                    </p>
+                    <ul>
+                        <li><strong>架构规划：</strong> 定义“主页、出行、乘车、专区、我的”五大一级页面。</li>
+                        <li><strong>功能实现：</strong> 实现了二维码乘车、实时拥挤度查询、紧急联系管理方等核心功能。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time-label">Week 4</div>
+                <div class="time-content">
+                    <h3>自助终端与迭代完善</h3>
+                    <span class="tag">8.25 - 8.31</span>
+                    <p>
+                        根据专家反馈完成了APP迭代，并将设计重点转移至<strong>自助服务机 (Kiosk)</strong>。
+                    </p>
+                    <ul>
+                        <li><strong>线性逻辑：</strong> 确立“待机页面 - 语言选择 - 主页 - 功能模块”的高效操作流。</li>
+                        <li><strong>聚焦核心：</strong> 刻意摒弃复杂跳转，仅聚焦“地图指引”和“紧急情况帮助”两大即时服务，适应公共场景需求。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </section>
-  </main>
 
-  <footer>
-    <p>© 2025 陈煊鹏 | 中车唐山机车车辆有限公司 × 天津大学 暑期设计工作坊</p>
-    <p>Designed with ❤️ for a smarter, greener future.</p>
-  </footer>
+    <section id="reflection" class="container">
+        <div class="reveal">
+            <h2 class="section-title">收获与体会</h2>
+            <div class="card" style="background: linear-gradient(135deg, #00528E 0%, #003055 100%); color: white;">
+                <h3 style="color: white;">跨越边界的成长</h3>
+                <p style="color: rgba(255,255,255,0.9);">
+                    “在唐车的实习，是我学生生涯中一次意义非凡的深度学习与成长之旅。”
+                </p>
+                <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div>
+                        <h4 style="color: #6eb5ff; margin-bottom: 10px;">跨文化协作</h4>
+                        <p style="color: rgba(255,255,255,0.8); font-size: 14px;">
+                            与来自不同国家、不同专业背景的伙伴并肩工作，极大地提升了我的跨文化沟通与高效协作能力。
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #6eb5ff; margin-bottom: 10px;">设计思维进阶</h4>
+                        <p style="color: rgba(255,255,255,0.8); font-size: 14px;">
+                            从用户调研到产品规划，独立负责交互设计是一场对“自我表达”与“用户体验”融合的双重探索。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <script>
-    // 滚动动画效果
-    document.addEventListener('DOMContentLoaded', function() {
-      // 顶部标题动画
-      const heroContent = document.querySelector('.hero-content');
-      setTimeout(() => {
-        heroContent.classList.add('active');
-      }, 300);
-      
-      // 导航栏滚动效果
-      const navbar = document.getElementById('navbar');
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 100) {
-          navbar.classList.add('scrolled');
-        } else {
-          navbar.classList.remove('scrolled');
+    <footer>
+        <p>&copy; 2025 陈煊鹏 | 基于 CRRC Tangshan 实习汇报生成</p>
+        <p style="opacity: 0.5; margin-top: 5px;">Design Internship Portfolio</p>
+    </footer>
+
+    <script>
+        // 平滑滚动
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
         }
-      });
-      
-      // 内容滑动动画
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-          }
+
+        // 滚动监听与动画触发
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                observer.observe(el);
+            });
+
+            // 侧边栏高亮逻辑
+            window.addEventListener('scroll', () => {
+                const sections = ['home', 'intro', 'project', 'process', 'reflection'];
+                let current = '';
+
+                sections.forEach(section => {
+                    const element = document.getElementById(section);
+                    const sectionTop = element.offsetTop;
+                    if (scrollY >= sectionTop - 300) {
+                        current = section;
+                    }
+                });
+
+                document.querySelectorAll('.nav-dot').forEach(dot => {
+                    dot.classList.remove('active');
+                    if (dot.getAttribute('onclick').includes(current)) {
+                        dot.classList.add('active');
+                    }
+                });
+            });
         });
-      }, {
-        threshold: 0.1
-      });
-      
-      document.querySelectorAll('.fade-section').forEach(section => {
-        observer.observe(section);
-      });
-      
-      // 导航栏平滑滚动
-      document.querySelectorAll('nav a').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute('href'));
-          window.scrollTo({
-            top: target.offsetTop - 100,
-            behavior: 'smooth'
-          });
-        });
-      });
-    });
-  </script>
+    </script>
 </body>
 </html>
