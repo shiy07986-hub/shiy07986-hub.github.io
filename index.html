@@ -125,13 +125,10 @@
     position: absolute;
     bottom: -8vh;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(224, 178, 106, 0.55), rgba(224, 178, 106, 0));
+    background: radial-gradient(circle, rgba(var(--particle-rgb, 224, 178, 106), 0.55), rgba(var(--particle-rgb, 224, 178, 106), 0));
     filter: blur(6px);
     opacity: 0;
     animation: particleRise linear infinite;
-  }
-  html[data-theme="dark"] .particle {
-    background: radial-gradient(circle, rgba(217, 165, 91, 0.4), rgba(217, 165, 91, 0));
   }
   @keyframes particleRise {
     0%   { transform: translate(0, 0) scale(1); opacity: 0; }
@@ -174,15 +171,27 @@
     from { opacity: 0; transform: scale(0.965); }
     to   { opacity: 1; transform: scale(1); }
   }
-  /* 入场编排：卡片内元素依次浮现 */
+  /* 入场编排：卡片内元素依次浮现（带模糊聚焦） */
   .rise {
     opacity: 0;
     transform: translateY(16px);
+    filter: blur(10px);
     animation: riseIn 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
   @keyframes riseIn {
-    to { opacity: 1; transform: translateY(0); }
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
   }
+
+  /* 指针跟随的镜面高光 */
+  .glass-gloss {
+    position: absolute; inset: 0;
+    background: radial-gradient(520px circle at var(--gx, 50%) var(--gy, 28%),
+      rgba(255, 255, 255, 0.32), transparent 55%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+  .glass-card:hover .glass-gloss { opacity: 1; }
 
   /* 液态高光：缓慢游走的折射光斑 */
   .glass-card::before {
@@ -233,9 +242,15 @@
     line-height: 1;
     color: var(--accent);
     font-variant-numeric: tabular-nums;
-    text-shadow: 0 2px 20px rgba(176, 118, 47, 0.25);
+    text-shadow: 0 2px 20px rgba(var(--particle-rgb, 224, 178, 106), 0.28);
     transform-origin: center 70%;
     animation: heartbeat 3.4s ease-in-out 1.8s infinite;
+  }
+  /* 纪念日模式：更快的节奏 + 金色辉光 */
+  .day-number.festival {
+    animation-duration: 2.2s;
+    text-shadow: 0 0 14px rgba(var(--particle-rgb, 224, 178, 106), 0.55),
+                 0 0 46px rgba(var(--particle-rgb, 224, 178, 106), 0.4);
   }
   @keyframes heartbeat {
     0%, 100% { transform: scale(1); }
@@ -267,6 +282,15 @@
     opacity: 0.6;
   }
   .meta .milestone { color: var(--ink-faint); font-size: clamp(12px, 1.3vw, 14px); }
+
+  /* 实时计时 */
+  .live-timer {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    font-size: clamp(13px, 1.4vw, 16px);
+    padding-top: 2px;
+  }
 
   /* ---------- 名字落款 ---------- */
   .names {
@@ -304,6 +328,29 @@
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .lightbox.open img { transform: scale(1); }
+  .lb-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px) saturate(1.3);
+    -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .lb-nav:hover { background: rgba(255, 255, 255, 0.24); }
+  .lb-nav:active { transform: translateY(-50%) scale(0.92); }
+  .lb-nav svg { width: 20px; height: 20px; stroke: rgba(255, 255, 255, 0.9); }
+  .lb-nav.prev { left: clamp(12px, 3vw, 32px); }
+  .lb-nav.next { right: clamp(12px, 3vw, 32px); }
+  .lb-count {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px; letter-spacing: 0.3em; text-indent: 0.3em;
+    font-variant-numeric: tabular-nums;
+  }
 
   /* ---------- 宁静模式（Tweaks 一键关闭动感） ---------- */
   body.calm .particle { display: none; }
@@ -380,7 +427,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .photo-wall.drift, .glass-card::before, .tile, .day-number, .rise { animation: none; }
-    .tile, .rise { opacity: 1; transform: none; }
+    .tile, .rise { opacity: 1; transform: none; filter: none; }
     .particle { display: none; }
   }
 </style>
@@ -397,6 +444,7 @@
   <main class="stage">
     <div class="card-depth" id="cardDepth">
       <section class="glass-card">
+        <div class="glass-gloss" id="glassGloss"></div>
         <p class="eyebrow rise" style="animation-delay: 0.25s">SINCE 2024.11.17</p>
         <h1 class="title rise" style="animation-delay: 0.4s">我们在一起</h1>
         <div class="day-line rise" style="animation-delay: 0.55s">
@@ -406,6 +454,7 @@
         </div>
         <div class="meta rise" style="animation-delay: 0.75s">
           <span id="weeksLine"></span>
+          <div class="live-timer" id="liveTimer"></div>
         </div>
         <div class="names rise" style="animation-delay: 0.9s">
           陈煊鹏<span class="amp">&amp;</span>陈晓辉
@@ -414,14 +463,24 @@
     </div>
   </main>
 
-  <div class="lightbox" id="lightbox"><img id="lightboxImg" alt="照片放大查看"></div>
+  <div class="lightbox" id="lightbox">
+    <img id="lightboxImg" alt="照片放大查看">
+    <button class="lb-nav prev" id="lbPrev" aria-label="上一张">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="lb-nav next" id="lbNext" aria-label="下一张">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <span class="lb-count" id="lbCount"></span>
+  </div>
 
   <button class="tweaks-toggle" id="tweaksToggle" aria-label="Tweaks">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
   </button>
   <div class="tweaks-panel" id="tweaksPanel">
     <h3>TWEAKS</h3>
-    <div class="tweak-row"><span>深色模式</span><div class="switch" id="themeSwitch"></div></div>
+    <div class="tweak-row"><span>色彩随时间</span><div class="switch on" id="timeColorSwitch"></div></div>
+    <div class="tweak-row"><span>强制深色</span><div class="switch" id="themeSwitch"></div></div>
     <div class="tweak-row"><span>动感效果</span><div class="switch on" id="motionSwitch"></div></div>
     <div class="tweak-row"><span>照片墙漂移</span><div class="switch on" id="driftSwitch"></div></div>
     <div class="tweak-row"><span>照片墙浓度</span><input type="range" id="wallOpacity" min="20" max="90" value="50"></div>
@@ -444,8 +503,33 @@
 
   var weeks = Math.floor((days - 1) / 7);
   var restDays = (days - 1) % 7;
-  document.getElementById("weeksLine").textContent =
-    "始于 2024 年 11 月 17 日 · 已走过 " + weeks + " 周零 " + restDays + " 天";
+  var weeksText = "始于 2024 年 11 月 17 日 · 已走过 " + weeks + " 周零 " + restDays + " 天";
+
+  /* ---------- 纪念日彩蛋：周年 / 整百天 ---------- */
+  var special = null;
+  var nowD = new Date();
+  if (nowD.getMonth() === 10 && nowD.getDate() === 17) {
+    special = { label: "今天是 " + (nowD.getFullYear() - 2024) + " 周年纪念日" };
+  } else if (days % 100 === 0) {
+    special = { label: "今天是整百的第 " + days + " 天" };
+  }
+  if (special) weeksText += " · " + special.label;
+  document.getElementById("weeksLine").textContent = weeksText;
+  if (special) document.getElementById("dayNumber").classList.add("festival");
+
+  /* ---------- 实时计时：已相守 h 时 m 分 s 秒 ---------- */
+  var liveTimer = document.getElementById("liveTimer");
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function updateTimer() {
+    var e = Date.now() - START.getTime();
+    if (e < 0) e = 0;
+    var h = Math.floor(e / 3600000);
+    var m = Math.floor(e / 60000) % 60;
+    var s = Math.floor(e / 1000) % 60;
+    liveTimer.textContent = "已相守 " + h + " 小时 " + pad(m) + " 分 " + pad(s) + " 秒";
+  }
+  updateTimer();
+  setInterval(updateTimer, 1000);
 
   /* ---------- 大数字滚动入场 ---------- */
   var numEl = document.getElementById("dayNumber");
@@ -459,13 +543,66 @@
   }
   requestAnimationFrame(tick);
 
+  /* ---------- 时段色彩系统：页面颜色随北京时间变化 ----------
+     清晨 5-8 点 · 白天 8-17 点 · 黄昏 17-19 点 · 夜晚 19-5 点 */
+  var PALETTES = {
+    morning: {
+      light: { bg1: "#fdf9ef", bg2: "#f4ead9", glow: "214,170,96", accent: "#c08a3e", particle: "224,190,120" },
+      dark:  { bg1: "#191510", bg2: "#241d13", glow: "214,170,96", accent: "#dcb46e", particle: "224,190,120" }
+    },
+    day: {
+      light: { bg1: "#f6f1e8", bg2: "#ece3d3", glow: "196,148,82", accent: "#b0762f", particle: "224,178,106" },
+      dark:  { bg1: "#17140f", bg2: "#221d16", glow: "196,148,82", accent: "#d9a55b", particle: "224,178,106" }
+    },
+    dusk: {
+      light: { bg1: "#fbf0e7", bg2: "#f2dccd", glow: "198,106,74", accent: "#b95f43", particle: "230,150,110" },
+      dark:  { bg1: "#1b1310", bg2: "#2a1c15", glow: "198,106,74", accent: "#dd8b62", particle: "230,150,110" }
+    },
+    night: {
+      light: { bg1: "#eef1f8", bg2: "#dde3ef", glow: "110,130,190", accent: "#6a7cb5", particle: "150,165,215" },
+      dark:  { bg1: "#121522", bg2: "#1a1f33", glow: "120,140,200", accent: "#8fa3d9", particle: "150,165,215" }
+    }
+  };
+  function hexToRgbStr(hex) {
+    var v = parseInt(hex.slice(1), 16);
+    return ((v >> 16) & 255) + "," + ((v >> 8) & 255) + "," + (v & 255);
+  }
+  function periodOf(d) {
+    var h = d.getHours();
+    if (h >= 5 && h < 8) return "morning";
+    if (h < 17) return "day";
+    if (h < 19) return "dusk";
+    return "night";
+  }
+  var manualDark = false;   // 用户强制深色
+  var timeColor = true;     // 色彩随北京时间变化
+  function applyPalette() {
+    var period = timeColor ? periodOf(new Date()) : "day";
+    var dark = manualDark || (timeColor && period === "night");
+    var pal = PALETTES[period][dark ? "dark" : "light"];
+    var root = document.documentElement;
+    var bgRgb = hexToRgbStr(pal.bg1);
+    root.setAttribute("data-theme", dark ? "dark" : "light");
+    root.style.setProperty("--bg-1", pal.bg1);
+    root.style.setProperty("--bg-2", pal.bg2);
+    root.style.setProperty("--bg-accent", "rgba(" + pal.glow + ", " + (dark ? 0.12 : 0.16) + ")");
+    root.style.setProperty("--accent", pal.accent);
+    root.style.setProperty("--particle-rgb", pal.particle);
+    root.style.setProperty("--overlay",
+      "linear-gradient(180deg, rgba(" + bgRgb + ", 0.35), rgba(" + bgRgb + ", 0.72))");
+  }
+  applyPalette();
+  setInterval(applyPalette, 60000); // 每分钟校准一次时段
+
   /* ---------- 照片墙渲染（仅读取 photos 文件夹清单） ---------- */
   var wall = document.getElementById("photoWall");
   var fallbackBg = document.getElementById("fallbackBg");
   var TILE_TARGET = 18;
+  var photoItems = [];
 
   function renderWall(items) {
     wall.innerHTML = "";
+    photoItems = items;
 
     if (!items.length) {
       fallbackBg.classList.remove("hidden");
@@ -503,18 +640,38 @@
     renderWall(items);
   }
 
-  /* ---------- 照片放大查看 ---------- */
+  /* ---------- 照片放大查看（支持翻页） ---------- */
   var lightbox = document.getElementById("lightbox");
   var lightboxImg = document.getElementById("lightboxImg");
+  var lbCount = document.getElementById("lbCount");
+  var lbPrev = document.getElementById("lbPrev");
+  var lbNext = document.getElementById("lbNext");
+  var lbIndex = 0;
+
+  function showPhoto(idx) {
+    var total = photoItems.length;
+    if (!total) return;
+    lbIndex = ((idx % total) + total) % total;
+    lightboxImg.src = photoItems[lbIndex].url;
+    lbCount.textContent = (lbIndex + 1) + " / " + total;
+  }
   function openLightbox(url) {
-    lightboxImg.src = url;
+    var idx = 0;
+    for (var i = 0; i < photoItems.length; i++) {
+      if (photoItems[i].url === url) { idx = i; break; }
+    }
+    showPhoto(idx);
     lightbox.classList.add("open");
   }
-  lightbox.addEventListener("click", function () {
-    lightbox.classList.remove("open");
-  });
+  function closeLightbox() { lightbox.classList.remove("open"); }
+  lightbox.addEventListener("click", closeLightbox);
+  lbPrev.addEventListener("click", function (e) { e.stopPropagation(); showPhoto(lbIndex - 1); });
+  lbNext.addEventListener("click", function (e) { e.stopPropagation(); showPhoto(lbIndex + 1); });
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") lightbox.classList.remove("open");
+    if (!lightbox.classList.contains("open")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowLeft") showPhoto(lbIndex - 1);
+    if (e.key === "ArrowRight") showPhoto(lbIndex + 1);
   });
 
   /* ---------- 鼠标视差：照片墙与玻璃卡反向微移 ---------- */
@@ -533,9 +690,17 @@
     if (!rafId) rafId = requestAnimationFrame(applyParallax);
   });
 
-  /* ---------- 漂浮光斑粒子 ---------- */
+  /* ---------- 玻璃卡指针高光跟随 ---------- */
+  var glassCard = document.querySelector(".glass-card");
+  glassCard.addEventListener("mousemove", function (e) {
+    var r = glassCard.getBoundingClientRect();
+    glassCard.style.setProperty("--gx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
+    glassCard.style.setProperty("--gy", ((e.clientY - r.top) / r.height * 100).toFixed(1) + "%");
+  });
+
+  /* ---------- 漂浮光斑粒子（纪念日加密一倍） ---------- */
   var particlesBox = document.getElementById("particles");
-  var PARTICLE_COUNT = 14;
+  var PARTICLE_COUNT = special ? 28 : 14;
   for (var pi = 0; pi < PARTICLE_COUNT; pi++) {
     var p = document.createElement("div");
     p.className = "particle";
@@ -555,16 +720,18 @@
     panel.classList.toggle("open");
   });
 
+  var timeColorSwitch = document.getElementById("timeColorSwitch");
+  timeColorSwitch.addEventListener("click", function () {
+    timeColor = !timeColor;
+    timeColorSwitch.classList.toggle("on", timeColor);
+    applyPalette();
+  });
+
   var themeSwitch = document.getElementById("themeSwitch");
   themeSwitch.addEventListener("click", function () {
-    var dark = document.documentElement.getAttribute("data-theme") === "dark";
-    if (dark) {
-      document.documentElement.removeAttribute("data-theme");
-      themeSwitch.classList.remove("on");
-    } else {
-      document.documentElement.setAttribute("data-theme", "dark");
-      themeSwitch.classList.add("on");
-    }
+    manualDark = !manualDark;
+    themeSwitch.classList.toggle("on", manualDark);
+    applyPalette();
   });
 
   var motionSwitch = document.getElementById("motionSwitch");
