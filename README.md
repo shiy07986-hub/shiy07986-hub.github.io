@@ -12,9 +12,7 @@ https://shiy07986-hub.github.io/
 
 ## 更新照片墙
 
-1. 把照片（jpg / png / gif / webp）拷进 `photos/` 文件夹
-2. 双击 `更新照片.command`（首次如被 macOS 拦截：右键 → 打开）
-3. 脚本会自动刷新照片清单并推送到 GitHub，约 1 分钟后线上生效
+把照片（jpg / png / gif / webp）拷进 `photos/` 文件夹
 
 ## 技术说明
 
