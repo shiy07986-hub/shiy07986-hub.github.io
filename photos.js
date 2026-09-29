@@ -1,1 +1,1 @@
-window.PHOTO_SOURCES = ["photos/photo-001.webp", "photos/photo-002.webp", "photos/photo-003.webp", "photos/photo-004.webp", "photos/photo-005.webp", "photos/photo-006.webp", "photos/photo-007.webp"];
+window.PHOTO_SOURCES = ["photos/photo-001.webp", "photos/photo-002.webp", "photos/photo-003.webp", "photos/photo-004.webp", "photos/photo-005.webp", "photos/photo-006.webp", "photos/photo-007.webp", "photos/photo-008.webp", "photos/photo-009.webp", "photos/photo-010.webp", "photos/photo-011.webp", "photos/photo-012.webp", "photos/photo-013.webp"];
