@@ -1,0 +1,27 @@
+/* A restrained orbit and a tactile day-light dial. */
+.distant-planet,.distant-planet.is-visible{width:clamp(10px,1.55vw,17px);background:radial-gradient(circle,var(--orbit-core,#fff2d7) 0%,var(--orbit-core,#fff2d7) 18%,rgba(220,234,255,.4) 42%,rgba(220,234,255,.1) 62%,transparent 76%);box-shadow:0 0 9px 1px rgba(225,237,255,.19),0 0 21px 3px rgba(217,229,255,.07)}
+.orbit-track{position:absolute;inset:0;width:100%;height:100%;overflow:visible;opacity:calc(var(--night-strength)*.1);transition:opacity 2s;pointer-events:none}
+.orbit-track path{fill:none;stroke:#d7e6ff;stroke-width:1;vector-effect:non-scaling-stroke}
+.sky.is-gallery .orbit-track{display:none}
+.color-control{width:266px;padding:18px;border-radius:28px;color:var(--ink);background:linear-gradient(145deg,color-mix(in srgb,var(--sky-bottom) 35%,transparent),rgba(255,255,255,.1));border-color:color-mix(in srgb,var(--ink) 12%,rgba(255,255,255,.35));box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 16px 48px rgba(9,25,45,.15)}
+.color-control-title{font-size:12px;letter-spacing:.03em;white-space:nowrap;gap:8px}
+.color-control-title svg{flex-shrink:0}
+.color-control-body{padding-top:20px}
+#colorTime.light-dial{position:relative;display:block;width:216px;height:216px;margin:0 auto;background:none;border-radius:50%;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;outline-offset:5px}
+.light-dial::before{content:'';position:absolute;inset:14px;border-radius:50%;padding:12px;background:conic-gradient(from 0deg,#485476 0%,#b594a3 20%,#f5d9b6 27%,#badbea 40%,#e6edf0 50%,#e9c99d 66%,#cd9aaa 75%,#777b9b 84%,#485476 100%);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;filter:drop-shadow(0 2px 5px rgba(18,41,64,.12));opacity:.95}
+.light-dial::after{content:'';position:absolute;inset:26px;border-radius:50%;border:1px solid rgba(255,255,255,.15);pointer-events:none}
+.dial-ticks{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1;opacity:.28;pointer-events:none}
+.dial-ticks .major-tick{stroke-width:1.5}
+.dial-hand{position:absolute;inset:20px;transform:rotate(var(--dial-angle,0deg));transition:transform .65s cubic-bezier(.22,1,.36,1);pointer-events:none}
+.dial-knob{position:absolute;left:50%;top:0;width:18px;height:18px;border-radius:50%;transform:translate(-50%,-50%);background:#fff;border:3px solid rgba(255,255,255,.8);box-shadow:0 1px 8px rgba(18,41,64,.3),0 0 0 5px rgba(255,255,255,.13)}
+.light-dial.is-dragging{cursor:grabbing}.light-dial.is-dragging .dial-hand{transition:none}
+.light-dial:focus-visible{outline:2px solid color-mix(in srgb,var(--ink) 65%,transparent)}
+.dial-center{position:absolute;inset:49px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;pointer-events:none}
+.dial-symbol{width:24px;height:24px;opacity:.55}.dial-symbol svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round}
+#colorTimeLabel{font-size:26px;font-weight:400;letter-spacing:.16em;padding-left:.16em;white-space:nowrap;line-height:1.4}
+.reset-button{margin-top:20px;font-size:12px;letter-spacing:.06em;color:var(--ink);background:rgba(255,255,255,.12);border-color:color-mix(in srgb,var(--ink) 12%,rgba(255,255,255,.28))}
+.color-control.is-minimized{width:48px;height:48px;padding:0;border-radius:50%}
+.is-minimized .color-control-head{height:100%}.is-minimized .color-control-title span,.is-minimized .color-control-body{display:none}
+@media(max-width:600px){.color-control{width:254px;padding:16px}.color-control.is-minimized{width:46px;height:46px;padding:0}.distant-planet,.distant-planet.is-visible{width:11px}}
+@media(prefers-reduced-motion:reduce){.orbit-track,.dial-hand{transition:none}}
+@media(prefers-reduced-transparency:reduce){.color-control{background:var(--sky-mid);backdrop-filter:none;-webkit-backdrop-filter:none}}

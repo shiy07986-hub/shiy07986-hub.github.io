@@ -3,95 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#91b8db">
-  <meta name="description" content="记录我们从 2024 年 11 月 17 日开始的每一天。">
-  <title>我们的每一天</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23fff' d='M32 54S8 40 8 21c0-12 15-16 24-5 9-11 24-7 24 5 0 19-24 33-24 33Z'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#111c34">
+  <meta name="description" content="陈晓辉和陈煊鹏，从 2024.11.17 开始，一起经过每一天。">
+  <title>我们的每一天 · Together</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='27' fill='%237ebde1'/%3E%3Cpath d='M21 16l15 3 4 10-12 9-3 14-8-18z' fill='%23d7e2cf'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
+  <link rel="preload" href="assets/fonts/cormorant-garamond-500.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="scene.css">
+  <link rel="stylesheet" href="art-theme.css">
+  <link rel="stylesheet" href="light-controls.css">
 </head>
 <body>
-  <div class="sky" aria-hidden="true">
-    <div class="sun"></div>
-    <div class="aurora aurora-a"></div>
-    <div class="aurora aurora-b"></div>
-    <div class="grain"></div>
-  </div>
-
+  <div class="sky" aria-hidden="true"><div class="sky-light"></div><div class="sky-haze"></div><div class="day-clouds"></div><div class="nebula"></div><div class="stars" id="starField"></div><svg class="orbit-track" aria-hidden="true"><path id="orbitPath"/></svg><div class="distant-planet" id="distantPlanet"></div><div class="meteor" id="meteor"></div><div class="cursor-glow"></div></div>
   <main>
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="glass hero-card float-layer" data-depth="10">
-        <div class="eyebrow">
-          <span class="light-dot"></span>
-          <span id="periodLabel">此刻的我们</span>
-        </div>
-
-        <div class="counter-wrap">
-          <p class="overline">在一起</p>
-          <h1 id="hero-title"><span id="dayCount" aria-live="polite">—</span><span class="unit">天</span></h1>
-          <p class="names">陈晓辉 <span aria-hidden="true">♡</span> 陈煊鹏</p>
-          <p class="date-line">始于 2024.11.17</p>
-        </div>
-
-        <div class="today-row">
-          <div>
-            <span class="meta-label">今天</span>
-            <strong id="todayDate">—</strong>
-          </div>
-          <div class="time-block">
-            <span class="meta-label">此时此刻</span>
-            <strong id="localTime">—</strong>
-          </div>
-        </div>
-      </div>
-
-      <button class="scroll-cue" id="scrollToMemories" type="button" aria-label="前往照片墙">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-      </button>
-    </section>
-
-    <section class="memories" aria-labelledby="memories-title">
-      <header class="section-head">
-        <p class="overline">Moments</p>
-        <h2 id="memories-title">一起走过的光景</h2>
-        <p>每一次按下快门，时间就替我们多保存了一刻。</p>
+    <section id="home" class="hero" aria-labelledby="hero-title">
+      <header class="hero-header">
+        <p class="names">陈晓辉 <span aria-hidden="true">×</span> 陈煊鹏</p>
+        <div class="clock"><span>此时此刻 · 北京时间</span><time id="localTime">—</time><span id="todayDate"></span></div>
       </header>
-
-      <div class="photo-grid" id="photoGrid"></div>
+      <div class="hero-copy">
+        <p class="eyebrow">一起，经过每一天</p>
+        <h1 id="hero-title"><span class="counter-label">我们在一起</span><span id="dayCount">—</span><span class="sr-only" lang="en">days</span></h1>
+      </div>
+      <span class="unit hero-unit" lang="en" aria-hidden="true">days</span>
+      <div class="earth-stage"><div class="earth-halo" aria-hidden="true"></div><div class="earth-fallback" aria-hidden="true"></div><canvas id="earthCanvas" tabindex="0" role="img" aria-label="可旋转的卡通小星球。拖动或使用方向键旋转，按 Home 恢复初始视角" aria-describedby="earthHint"></canvas></div>
+      <div class="hero-date"><span class="date-line">始于 2024.11.17</span><span id="periodLabel">此刻的我们</span></div>
+      <div class="earth-tools"><p id="earthHint">拖动，探索我们的小星球</p><button class="glass-button earth-reset" id="resetEarth" type="button" hidden>回到初始视角</button></div>
+      <div class="hero-bottom"><span class="quiet-note">OUR LITTLE WORLD</span><a class="enter-button" id="enterGallery" href="#memories">进入照片墙</a><span class="quiet-note">YOU & ME, ALWAYS</span></div>
     </section>
-
-    <footer>
-      <span>2024.11.17 — Forever</span>
-      <span aria-hidden="true">♡</span>
-    </footer>
+    <section id="memories" class="memories" aria-labelledby="memories-title" hidden>
+      <nav class="gallery-nav"><a class="glass-button back-button" href="#home" id="backHome"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg><span>回到主页面</span></a><span class="gallery-signature">陈晓辉 × 陈煊鹏</span></nav>
+      <header class="gallery-heading"><p class="eyebrow">OUR MOMENTS</p><h2 id="memories-title" tabindex="-1">我们的片刻<span class="heading-dot">.</span></h2><div class="gallery-subtitle"><p>把一起走过的时光，慢慢收藏。</p><span id="photoCount">— 张回忆</span></div></header>
+      <div class="photo-grid" id="photoGrid" aria-label="我们的照片墙"></div>
+      <p class="gallery-empty" id="galleryEmpty" hidden>新的回忆，正在路上。</p>
+      <footer class="gallery-ending">
+        <p class="closing-message" lang="zh-CN">陈晓辉是猪</p>
+        <div class="closing-translations">
+          <div class="translation-row"><span lang="en">Chen Xiaohui is a pig.</span><span lang="ja">陳暁輝は豚です。</span><span lang="ko">천샤오후이는 돼지입니다.</span></div>
+          <div class="translation-row"><span lang="de">Chen Xiaohui ist ein Schwein.</span><span lang="fr">Chen Xiaohui est un cochon.</span></div>
+        </div>
+        <div class="closing-colophon"><span>2024.11.17 — Forever</span><a href="model-source.html" target="_blank" rel="noopener">模型来源</a></div>
+      </footer>
+    </section>
   </main>
-
-  <aside class="color-control is-minimized" aria-label="页面日光颜色控制">
+  <aside class="color-control is-minimized" aria-label="更改光照方式">
     <div class="color-control-head">
-      <span class="color-control-title">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg>
-        <span>日光</span>
-      </span>
-      <output id="colorTimeLabel" for="colorTime">—</output>
-      <button class="color-control-toggle" id="colorControlToggle" type="button" aria-label="展开日光调节" aria-expanded="false" title="展开日光调节">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 14 4-4 4 4"/></svg>
-      </button>
+      <span class="color-control-title"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2M12 20v2M5 5l1.4 1.4M17.6 17.6 19 19M2 12h2M20 12h2M5 19l1.4-1.4M17.6 6.4 19 5"/></svg><span>更改光照方式</span></span>
+      <button id="colorControlToggle" type="button" aria-label="展开光照设置" aria-expanded="false" aria-controls="lightControls"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 14 4-4 4 4"/></svg></button>
     </div>
-    <div class="color-control-body">
-      <input id="colorTime" type="range" min="0" max="1439" step="1" aria-label="调节页面日光颜色">
-      <button id="resetColorTime" type="button">重置至北京时间</button>
+    <div class="color-control-body" id="lightControls" inert>
+      <div id="colorTime" class="light-dial" role="slider" tabindex="0" aria-label="光照时段，点击或拖动圆环，使用方向键调节" aria-valuemin="0" aria-valuemax="1439" aria-valuenow="0" aria-valuetext="凌晨">
+        <svg class="dial-ticks" viewBox="0 0 216 216" aria-hidden="true"><g id="dialTicks"></g></svg>
+        <div class="dial-hand" aria-hidden="true"><span class="dial-knob"></span></div>
+        <span class="dial-center"><span class="dial-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2M12 20v2M5 5l1.4 1.4M17.6 17.6 19 19M2 12h2M20 12h2M5 19l1.4-1.4M17.6 6.4 19 5"/></svg></span><span id="colorTimeLabel">下午</span></span>
+      </div>
+      <button class="glass-button reset-button" id="resetColorTime" type="button">对齐至现在</button>
     </div>
   </aside>
-
-  <dialog class="lightbox" id="lightbox" aria-label="照片预览">
-    <button class="close-button" type="button" aria-label="关闭照片预览">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
-    </button>
-    <button class="nav-button prev" type="button" aria-label="上一张照片"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
-    <figure><img id="lightboxImage" src="" alt="放大的回忆照片"><figcaption id="imagePosition"></figcaption></figure>
-    <button class="nav-button next" type="button" aria-label="下一张照片"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
-  </dialog>
-
-  <script src="photos.js"></script>
-  <script src="script.js"></script>
+  <dialog class="lightbox" id="lightbox" aria-label="照片预览"><button class="glass-button close-button" type="button" aria-label="关闭照片预览"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg></button><button class="glass-button nav-button prev" type="button" aria-label="上一张照片"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><figure><img id="lightboxImage" alt="放大的回忆照片"><figcaption id="imagePosition"></figcaption></figure><button class="glass-button nav-button next" type="button" aria-label="下一张照片"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button></dialog>
+  <script src="photos.js"></script><script src="sky.js?v=light-ring-1"></script><script src="script.js?v=light-ring-1"></script><script type="module" src="earth.js?v=centered-hero-1"></script>
 </body>
 </html>

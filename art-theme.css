@@ -1,0 +1,93 @@
+/* Shared daylight palette, matte globe, and continuous orbital motion. */
+@property --sky-top{syntax:'<color>';inherits:true;initial-value:#111c34}
+@property --sky-mid{syntax:'<color>';inherits:true;initial-value:#273956}
+@property --sky-bottom{syntax:'<color>';inherits:true;initial-value:#74738a}
+:root{transition:--sky-top 1.2s,--sky-mid 1.2s,--sky-bottom 1.2s}
+.sky{z-index:0;pointer-events:none}
+main{position:relative;z-index:1}
+.unit{font-family:'Together Serif',Didot,'Bodoni 72',Georgia,serif;font-weight:500;font-size:clamp(28px,5vw,58px);letter-spacing:-.03em;margin-left:18px;vertical-align:10px;line-height:1}
+#hero-title{white-space:nowrap}
+.earth-fallback{background:radial-gradient(circle at 28% 20%,transparent 10%,rgba(25,45,70,.42) 82%),url('assets/earth/art-fallback.webp') 58% 30%/cover;box-shadow:inset -25px -30px 70px rgba(19,44,70,.6),inset 3px 5px 12px #b6d8df}
+.earth-halo{box-shadow:0 -10px 65px 4px rgba(155,198,225,.15)}
+.hero-date{color:var(--ink);text-shadow:0 1px 10px rgba(170,194,204,.12)}
+#periodLabel,.earth-tools p,.quiet-note{color:var(--muted);text-shadow:none}
+.enter-button,.earth-reset{color:var(--ink);text-shadow:none}
+.enter-button:hover{color:var(--ink)}
+.hero-date,#periodLabel,.earth-tools p,.enter-button{text-shadow:0 1px 6px rgba(14,32,50,.25)}
+.distant-planet,.distant-planet.is-visible{position:absolute;left:0;top:0;width:clamp(12px,1.6vw,22px);aspect-ratio:1;opacity:1;border-radius:50%;background:radial-gradient(circle,#fffdf6 0%,#fff4cf 22%,#dce9ff 45%,rgba(215,228,255,.3) 67%,transparent 75%);box-shadow:0 0 18px 4px rgba(227,238,255,.35),0 0 55px 9px rgba(202,222,255,.17);transition:none;will-change:transform}
+.distant-planet::after{display:none}
+.distant-planet{width:clamp(20px,2.8vw,32px)}
+.sky.is-gallery{opacity:1}
+.sky.is-gallery .nebula,.sky.is-gallery .distant-planet{display:none}
+.sky.is-gallery .stars{opacity:calc(var(--night-strength)*.68)}
+.sky.is-gallery .star:nth-child(3n){visibility:hidden}
+.sky.is-gallery .star,.sky.is-gallery .day-clouds{animation-play-state:running}
+.sky.is-gallery .day-clouds{opacity:calc(var(--cloud-strength)*.36)}
+.sky-light{animation:light-drift 32s ease-in-out infinite alternate}
+.sky.is-gallery .sky-light{opacity:.8}
+.sky.is-paused *{animation-play-state:paused!important}
+.memories{background:transparent;color:var(--ink);isolation:isolate}
+.memories::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,var(--sky-top),var(--sky-mid) 75%,var(--sky-bottom));opacity:.3}
+.gallery-heading .eyebrow,.gallery-signature,.gallery-subtitle,footer{color:var(--muted)}
+.heading-dot{color:var(--muted)}
+footer{border-color:color-mix(in srgb,var(--ink) 15%,transparent)}
+.gallery-nav .glass-button{color:var(--ink);border-color:color-mix(in srgb,var(--ink) 14%,rgba(255,255,255,.55))}
+.photo-card{box-shadow:0 8px 25px rgba(20,42,60,.12);background:color-mix(in srgb,var(--sky-bottom) 55%,transparent)}
+.photo-card:focus-visible{outline-color:var(--ink)}
+.photo-card.is-error::after{color:var(--muted)}
+@keyframes light-drift{from{transform:translate(-2%,0) scale(.98);filter:blur(65px);opacity:.68}to{transform:translate(3%,2%) scale(1.06);filter:blur(80px);opacity:1}}
+@media(max-width:600px){.unit{font-size:29px;margin-left:12px;vertical-align:6px}#dayCount{font-size:clamp(138px,38vw,205px)}.distant-planet{width:20px}}
+@media(prefers-reduced-motion:reduce){.sky-light{animation:none!important}.distant-planet{will-change:auto}}
+
+/* A miniature animated world replaces the flat geographic globe. */
+.earth-stage{top:36%;width:min(94vw,112vh,1200px)}
+.earth-halo{inset:17%;opacity:.35;box-shadow:0 -8px 70px 10px color-mix(in srgb,var(--sun-color) 30%,transparent)}
+.earth-fallback{inset:24%;background:radial-gradient(circle at 35% 25%,rgba(212,240,255,.2),rgba(123,182,215,.12) 50%,transparent 72%);box-shadow:none;animation:planet-loading 2.5s ease-in-out infinite}
+.earth-stage.has-error .earth-fallback{animation:none}
+#earthCanvas{border-radius:50%}
+.hero-date{top:65%;color:var(--ink);text-shadow:0 1px 8px color-mix(in srgb,var(--sky-bottom) 80%,transparent)}
+.hero-date #periodLabel{color:var(--muted);text-shadow:inherit}
+.earth-tools p{color:rgba(255,255,255,.9);text-shadow:0 2px 10px rgba(7,31,58,.85)}
+.enter-button,.enter-button:hover{color:#fff;text-shadow:0 2px 10px rgba(7,31,58,.8)}
+.earth-reset{color:#fff;background:rgba(36,70,100,.16);border-color:rgba(255,255,255,.32)}
+.model-credit{flex-basis:100%;font-size:10px;line-height:1.6;opacity:.7}
+.model-credit a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+footer{flex-wrap:wrap;row-gap:14px}
+@keyframes planet-loading{50%{opacity:.35;transform:scale(.96)}}
+@media(max-width:600px){.earth-stage{top:49%;width:145vw}.hero-date{top:68%}.model-credit{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.earth-fallback{animation:none}}
+
+/* A quiet closing page, with one line of emphasis and generous breathing room. */
+footer.gallery-ending{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;width:100%;max-width:900px;margin:110px auto 0;padding:0 0 max(100px,calc(env(safe-area-inset-bottom) + 80px));border:0;text-align:center;letter-spacing:normal}
+.closing-message{margin:0;font-family:'Together Serif','Songti SC','STSong',serif;font-size:22px;font-weight:400;line-height:1.6;letter-spacing:.14em;padding-left:.14em;color:var(--ink)}
+.closing-translations{margin-top:24px;display:grid;row-gap:10px;color:var(--ink);font-size:12px;line-height:1.9;letter-spacing:.025em;opacity:.75}
+.translation-row{display:flex;justify-content:center;align-items:baseline;flex-wrap:wrap;column-gap:28px;row-gap:10px}
+.translation-row span{white-space:nowrap}
+.closing-colophon{margin-top:48px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px 20px;font-size:10px;line-height:1.8;letter-spacing:.08em;color:var(--ink);opacity:.75}
+.closing-colophon a{color:inherit;text-decoration:none;min-height:44px;display:inline-flex;align-items:center;transition:opacity .3s}
+.closing-colophon a:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
+.gallery-ending.is-visible .closing-message{animation:closing-reveal .8s both cubic-bezier(.22,1,.36,1)}
+.gallery-ending.is-visible .closing-translations{animation:closing-reveal .8s .15s both cubic-bezier(.22,1,.36,1)}
+.gallery-ending.is-visible .closing-colophon{animation:closing-reveal .8s .3s both cubic-bezier(.22,1,.36,1)}
+@keyframes closing-reveal{from{opacity:0;transform:translateY(9px)}to{transform:translateY(0)}}
+@media(max-width:600px){footer.gallery-ending{margin-top:96px;padding-bottom:max(90px,calc(env(safe-area-inset-bottom) + 75px))}.closing-message{font-size:22px}.closing-translations{margin-top:22px;row-gap:12px}.translation-row{column-gap:18px;row-gap:8px}.translation-row:first-child span[lang="en"]{flex-basis:100%}.closing-colophon{margin-top:36px}}
+@media(prefers-reduced-motion:reduce){.gallery-ending.is-visible>*{animation:none!important}}
+
+/* Keep the gallery return action anchored to the viewport, above every photo. */
+.gallery-nav{justify-content:flex-end;min-height:114px}
+.gallery-nav .back-button{position:fixed;top:calc(24px + env(safe-area-inset-top));left:calc(24px + env(safe-area-inset-left));z-index:12;min-height:44px;padding:0 17px;border-radius:999px;font-size:12px;letter-spacing:.03em;color:var(--ink);background:linear-gradient(135deg,color-mix(in srgb,var(--sky-bottom) 65%,transparent),color-mix(in srgb,var(--sky-mid) 55%,transparent));border:1px solid color-mix(in srgb,var(--ink) 14%,rgba(255,255,255,.55));box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 5px 20px rgba(11,29,49,.12);backdrop-filter:blur(24px) saturate(145%);-webkit-backdrop-filter:blur(24px) saturate(145%);transition:background .3s,box-shadow .3s,opacity .25s}
+.gallery-nav .back-button:hover{background:color-mix(in srgb,var(--sky-bottom) 85%,transparent);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 7px 24px rgba(11,29,49,.16)}
+body:has(.lightbox[open]) .gallery-nav .back-button{visibility:hidden;opacity:0;pointer-events:none}
+@media(max-width:600px){.gallery-nav{min-height:93px}.gallery-nav .back-button{top:calc(16px + env(safe-area-inset-top));left:calc(16px + env(safe-area-inset-left));padding:0 15px}}
+@media(prefers-reduced-transparency:reduce){.gallery-nav .back-button{background:var(--sky-mid);backdrop-filter:none;-webkit-backdrop-filter:none}}
+
+/* Center the number itself; the unit never contributes to its layout width. */
+.hero{--counter-size:clamp(170px,min(30vw,34vh),370px);--unit-gap:14px}
+.hero-copy{top:50%;left:50%;right:auto;width:max-content;text-align:center;transform:translate(-50%,-50%);transition:none}
+#hero-title{position:relative;font-size:var(--counter-size);line-height:.87;letter-spacing:normal}
+#dayCount{display:block;font-size:var(--counter-size);line-height:.87}
+.hero-copy .eyebrow{position:absolute;left:50%;bottom:calc(100% + 64px);transform:translateX(-50%);margin:0;white-space:nowrap}
+.counter-label{position:absolute;left:50%;bottom:calc(100% + 22px);transform:translateX(-50%);margin:0;font-size:15px;line-height:1.5;white-space:nowrap}
+.unit.hero-unit{position:absolute;z-index:3;left:calc(50% + var(--count-width,300px)/2 + var(--unit-gap));top:calc(50% + var(--counter-size)*.435 - var(--counter-size)*.13);margin:0;font-size:calc(var(--counter-size)*.13);line-height:1;letter-spacing:-.025em;vertical-align:baseline;color:var(--ink);pointer-events:none}
+.hero-date{gap:8px}
+@media(max-width:600px){.hero{--counter-size:clamp(138px,38vw,205px);--unit-gap:8px}.hero-copy .eyebrow{bottom:calc(100% + 58px)}.counter-label{bottom:calc(100% + 20px);font-size:14px}}

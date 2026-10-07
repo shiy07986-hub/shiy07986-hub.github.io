@@ -1,0 +1,12 @@
+Earth cartoon — onirix
+Source: https://sketchfab.com/3d-models/earth-cartoon-8980e2238c534516bc2345703cd8eae4
+License: Creative Commons Attribution 4.0 (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+GLB obtained from the same model author's publicly shared demonstration:
+https://www.onirix.com/experience/animated-planet-earth/
+Original resource name: TierraCartoon_V2.glb
+
+Adaptations: lighting, roughness, cloud tint/opacity, hiding promotional logo nodes,
+interactive rotation and reduced-motion support. Geometry and original animation retained.
+Attribution is displayed in the photo gallery footer.
